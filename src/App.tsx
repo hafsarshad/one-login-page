@@ -19,14 +19,14 @@ const App: React.FC = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
-                    <Route 
-                        path="/products" 
-                        element={
-                            <ProtectedRoute>
-                                <ProductPage />
-                            </ProtectedRoute>
-                        } 
-                    />
+                    <Route
+  path="/products"
+  element={
+    <ProtectedRoute>
+      <ProductPage /> {/* Make sure this is the correct component */}
+    </ProtectedRoute>
+  }
+/>
                 </Routes>
             </Router>
         </AuthProvider>

@@ -1,3 +1,4 @@
+// LoginForm.tsx
 import React from 'react';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input } from 'antd';
@@ -11,27 +12,29 @@ type FieldType = {
   remember?: boolean;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log('Success:', values);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
-
-
 const LoginForm: React.FC = () => {
-
   const { login } = useAuth();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLogin = () => {
-        login();
-        navigate('/products'); // Use navigate for redirection
-    }; 
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    console.log('Form Values:', values);
+    const { username, password } = values;
+
+    try {
+      await login(username || '', password || '');
+      navigate('/products');
+    } catch (error: any) {
+      console.error('Login failed:', error.message);
+    }
+  };
+
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
 
   return (
-    <Form className="bg-transparent"
+    <Form
+      className="bg-transparent"
       name="basic"
       initialValues={{ remember: true }}
       onFinish={onFinish}
@@ -53,20 +56,20 @@ const LoginForm: React.FC = () => {
       </Form.Item>
 
       <div className='flex justify-between'>
-      <Form.Item<FieldType>
-        name="remember"
-        valuePropName="checked"
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
+        <Form.Item<FieldType>
+          name="remember"
+          valuePropName="checked"
+        >
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
 
-      <Form.Item>
-        <a className="text-[#3bbdb8]" href="">Forgot password?</a>
-      </Form.Item>
-
+        <Form.Item>
+          <a className="text-[#3bbdb8]" href="">Forgot password?</a>
+        </Form.Item>
       </div>
+
       <Form.Item className="w-full">
-        <Button className="w-full bg-[#3bbdb8]" type="primary" htmlType="submit" onClick={handleLogin}>
+        <Button className="w-full bg-[#3bbdb8]" type="primary" htmlType="submit">
           Log In
         </Button>
       </Form.Item>
@@ -75,3 +78,4 @@ const LoginForm: React.FC = () => {
 };
 
 export default LoginForm;
+
